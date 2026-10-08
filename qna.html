@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Q&amp;A | Kiran - AI Workflow Automation</title>
+  <meta name="description" content="Frequently asked questions about AI workflows, tech stack, data security, delivery timelines, and automation consulting.">
+  <link rel="icon" type="image/png" href="cur.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="subpage.css">
+  <script>
+    (function() {
+      try {
+        var theme = localStorage.getItem('portfolio_theme') || 'lime';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body class="subpage-body" data-theme="lime">
+
+  <!-- Custom Glowing Cursor Dot -->
+  <div class="cursor-dot hidden" id="cursor-dot"></div>
+
+  <!-- Floating Subpage Header -->
+  <header class="subpage-header">
+    <div class="subpage-nav-left">
+      <a href="index.html" class="subpage-back-btn" id="qna-back-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>Back to Home</span>
+      </a>
+    </div>
+
+    <div class="subpage-nav-right">
+      <nav class="subpage-nav-pills">
+        <a href="why-us.html" class="subpage-nav-link">Why Us</a>
+        <a href="qna.html" class="subpage-nav-link active">Q&amp;A</a>
+        <a href="privacy.html" class="subpage-nav-link">Privacy Policy</a>
+      </nav>
+      <a href="project.html" class="subpage-nav-cta" id="qna-cta-nav">
+        <span>Start a Project</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="subpage-main">
+    
+    <!-- Hero Section -->
+    <section class="subpage-hero">
+      <div class="subpage-badge">
+        <span class="subpage-badge-dot"></span>
+        <span>KNOWLEDGE &amp; FAQ</span>
+      </div>
+      <h1 class="subpage-title">Questions &amp; Answers</h1>
+      <p class="subpage-subtitle">
+        Everything you need to know about our AI workflow development, architecture standards, data safety, and delivery timelines.
+      </p>
+    </section>
+
+    <!-- Interactive Accordion List -->
+    <section class="qna-accordion-list">
+      
+      <!-- Q1 -->
+      <div class="qna-accordion-item is-open">
+        <button class="qna-trigger" aria-expanded="true">
+          <span>What kinds of workflows can you automate?</span>
+          <span class="qna-trigger-icon">+</span>
+        </button>
+        <div class="qna-content">
+          <p class="qna-answer-text">
+            We specialize in end-to-end operational workflows: automated customer support triage and AI reply drafting, multi-agent research pipelines, CRM lead enrichment and syncing (HubSpot, Salesforce, Airtable), automated invoice parsing, custom Slack and Discord bots with LLM routing, database migrations, and bespoke REST/GraphQL API bridges.
+          </p>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="qna-accordion-item">
+        <button class="qna-trigger" aria-expanded="false">
+          <span>What tech stack and AI tools do you work with?</span>
+          <span class="qna-trigger-icon">+</span>
+        </button>
+        <div class="qna-content">
+          <p class="qna-answer-text">
+            Our primary workflow orchestrator is <strong>n8n</strong> (both self-hosted on Docker and n8n Cloud), backed by <strong>Python</strong> and <strong>Node.js</strong> for custom scripting. On the AI side, we leverage <strong>Anthropic Claude 3.5 Sonnet</strong>, <strong>OpenAI GPT-4o</strong>, and open-source models via Ollama. For databases, we commonly integrate with <strong>PostgreSQL</strong>, <strong>Supabase</strong>, <strong>Airtable</strong>, and <strong>Redis</strong>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="qna-accordion-item">
+        <button class="qna-trigger" aria-expanded="false">
+          <span>How long does a typical automation project take to complete?</span>
+          <span class="qna-trigger-icon">+</span>
+        </button>
+        <div class="qna-content">
+          <p class="qna-answer-text">
+            Most targeted, single-system automations (such as support ticket ingestion or lead qualification) are scoped, built, tested, and handed over within <strong>3 to 7 business days</strong>. Larger enterprise pipelines involving multiple data sources and complex multi-agent reasoning typically take <strong>2 to 3 weeks</strong>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="qna-accordion-item">
+        <button class="qna-trigger" aria-expanded="false">
+          <span>How do you protect our private company data and credentials?</span>
+          <span class="qna-trigger-icon">+</span>
+        </button>
+        <div class="qna-content">
+          <p class="qna-answer-text">
+            Security and privacy are paramount. All workflows are built directly inside your company's own infrastructure or cloud instances. We never store client API credentials on third-party servers. When configuring LLM integrations, we strictly use enterprise zero-data-retention endpoints that guarantee your proprietary data is never used to train external models.
+          </p>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="qna-accordion-item">
+        <button class="qna-trigger" aria-expanded="false">
+          <span>Do we own the workflows and source code after handover?</span>
+          <span class="qna-trigger-icon">+</span>
+        </button>
+        <div class="qna-content">
+          <p class="qna-answer-text">
+            Yes, 100%. Upon project completion, you receive complete ownership of all workflow JSON files, custom Python scripts, environment configs, and documentation. You also get a recorded video walkthrough explaining how every node functions and how to make future adjustments independently.
+          </p>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="qna-accordion-item">
+        <button class="qna-trigger" aria-expanded="false">
+          <span>What happens if an external API changes or a workflow encounters an error?</span>
+          <span class="qna-trigger-icon">+</span>
+        </button>
+        <div class="qna-content">
+          <p class="qna-answer-text">
+            Every pipeline we engineer includes built-in resilience: automatic retry mechanisms for temporary network blips, fallback error handlers, and real-time failure alerts sent directly to your Slack or email with exact diagnostic payloads. We also provide post-deployment warranty support to address any unforeseen edge cases.
+          </p>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="qna-accordion-item">
+        <button class="qna-trigger" aria-expanded="false">
+          <span>How do we get started?</span>
+          <span class="qna-trigger-icon">+</span>
+        </button>
+        <div class="qna-content">
+          <p class="qna-answer-text">
+            Simply click <strong>Start a Project</strong> and complete our brief project inquiry form describing your current workflow bottleneck. We will review your requirements, provide a clear architectural proposal and timeline within 24 hours, and schedule a kickoff call.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="subpage-cta-banner">
+      <h2 class="subpage-cta-title">Have a Question About Your Specific Stack?</h2>
+      <p class="subpage-cta-desc">
+        Tell us about your tools and goals — we'll outline the optimal automation architecture for your team.
+      </p>
+      <div class="subpage-cta-btns">
+        <a href="project.html" class="subpage-primary-btn" id="qna-start-project-cta">
+          <span>Start a Project</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+        <a href="why-us.html" class="subpage-secondary-btn">
+          <span>Learn Why Us</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Standalone Footer (Claude/Anthropic-Inspired Multi-Column Directory) -->
+  <footer class="site-standalone-footer">
+    <div class="footer-columns-grid">
+      <!-- Column 1: Company -->
+      <div class="footer-nav-col">
+        <h4 class="footer-nav-heading">Company</h4>
+        <ul class="footer-nav-list">
+          <li><a href="why-us.html" class="footer-nav-link">Why Us</a></li>
+          <li><a href="project.html" class="footer-nav-link">Start a Project</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 2: Resources -->
+      <div class="footer-nav-col">
+        <h4 class="footer-nav-heading">Resources</h4>
+        <ul class="footer-nav-list">
+          <li><a href="qna.html" class="footer-nav-link active">Q&amp;A</a></li>
+          <li><a href="index.html#skills" class="footer-nav-link">Skills &amp; Tech Stack</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Legal -->
+      <div class="footer-nav-col">
+        <h4 class="footer-nav-heading">Legal</h4>
+        <ul class="footer-nav-list">
+          <li><a href="privacy.html" class="footer-nav-link">Privacy Policy</a></li>
+          <li><a href="privacy.html#credentials" class="footer-nav-link">Client Confidentiality</a></li>
+          <li><a href="privacy.html#security" class="footer-nav-link">Data Security</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Connect -->
+      <div class="footer-nav-col">
+        <h4 class="footer-nav-heading">Connect</h4>
+        <ul class="footer-nav-list">
+          <li>
+            <a href="https://www.linkedin.com/in/kiran-kishore-a50ba543b" target="_blank" rel="noopener" class="footer-nav-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 6px;"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              <span>LinkedIn</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/kirankishore-lab" target="_blank" rel="noopener" class="footer-nav-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 6px;"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              <span>GitHub</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/kiran.workflow_forge/" target="_blank" rel="noopener" class="footer-nav-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 6px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <span>Instagram</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Standalone Footer Bottom Bar -->
+    <div class="standalone-footer-bottom">
+      <div class="footer-bottom-brand">
+        <span class="footer-brand-title">Kiran &bull; AI Workflow Automation</span>
+        <span class="footer-credit-text">Designed &amp; Developed by <strong>Kiran</strong></span>
+      </div>
+      <p class="footer-copyright-text">&copy; 2026 Kiran. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="subpage.js"></script>
+</body>
+</html>

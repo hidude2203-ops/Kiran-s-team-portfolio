@@ -1,9 +1,19 @@
 function initApp() {
-  // Always start at top/first section on reload
-  if ('scrollRestoration' in history) {
-    history.scrollRestoration = 'manual';
+  const hasVisited = sessionStorage.getItem('portfolio_visited') === 'true';
+  const urlHash = window.location.hash;
+
+  if (!hasVisited) {
+    sessionStorage.setItem('portfolio_visited', 'true');
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  } else if (urlHash) {
+    setTimeout(() => {
+      const targetEl = document.querySelector(urlHash);
+      if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
+    }, 60);
   }
-  window.scrollTo(0, 0);
 
   // ----------------------------------------------------
   // 0. GLOBAL DOM DECLARATIONS
@@ -41,11 +51,14 @@ function initApp() {
   const hidePreloader = () => {
     if (preloader) {
       preloader.classList.add('is-hidden');
+      preloader.style.display = 'none';
     }
     document.body.classList.add('hero-animated');
   };
 
-  if (preloader) {
+  if (hasVisited) {
+    hidePreloader();
+  } else if (preloader) {
     let startTime = null;
     const duration = 1000; // 1 second total fill duration
 
@@ -77,6 +90,9 @@ function initApp() {
     currentThemeIndex = (index + themes.length) % themes.length;
     const activeTheme = themes[currentThemeIndex];
     document.body.setAttribute('data-theme', activeTheme);
+    try {
+      localStorage.setItem('portfolio_theme', activeTheme);
+    } catch (e) {}
 
     if (welcomeThemeCircles) {
       welcomeThemeCircles.forEach(circle => {
@@ -92,6 +108,15 @@ function initApp() {
       setTimeout(() => moveIndicatorTo(activeNavItem), 50);
     }
   }
+
+  // Restore saved theme on load if available
+  try {
+    const savedTheme = localStorage.getItem('portfolio_theme');
+    if (savedTheme && themes.includes(savedTheme)) {
+      currentThemeIndex = themes.indexOf(savedTheme);
+      applyTheme(currentThemeIndex);
+    }
+  } catch (e) {}
 
   if (prevThemeBtn) {
     prevThemeBtn.addEventListener('click', () => {
@@ -110,16 +135,11 @@ function initApp() {
   // ----------------------------------------------------
   let indicatorRaf = null;
   function moveIndicatorTo(item) {
-    if (!item || !navIndicator || !navCapsule) return;
+    if (!item || !navIndicator) return;
     if (indicatorRaf) cancelAnimationFrame(indicatorRaf);
     indicatorRaf = requestAnimationFrame(() => {
-      const capsuleRect = navCapsule.getBoundingClientRect();
-      const itemRect = item.getBoundingClientRect();
-
-      if (!capsuleRect || !itemRect) return;
-
-      const leftOffset = itemRect.left - capsuleRect.left;
-      const itemWidth = itemRect.width;
+      const leftOffset = item.offsetLeft;
+      const itemWidth = item.offsetWidth;
 
       navIndicator.style.left = `${leftOffset}px`;
       navIndicator.style.width = `${itemWidth}px`;
@@ -352,7 +372,6 @@ function initApp() {
     if (navEyesBtn) {
       if (isSection1Active) {
         navEyesBtn.classList.remove('is-sleeping');
-        updateEyeSocketCache();
       } else {
         navEyesBtn.classList.add('is-sleeping');
         eyeSocketCache.forEach(item => {
@@ -488,7 +507,33 @@ function initApp() {
       caseStudy: {
         title: "Autonomous Multi-Agent Personal Assistant: Orchestrating Zero-Context-Switching Productivity via n8n, Slack, and Google Gemini",
         subtitle: "Supervisor-router architecture with specialized sub-agents for Slack, Gmail, and Google Calendar.",
-        execSummary: "To eliminate productivity loss from constant app-switching between communication and scheduling platforms, I engineered an autonomous, multi-agent personal assistant integrated into Slack using self-hosted n8n and Google Gemini 1.5 Flash. The system is architected around a supervisor-router design pattern that ingests unstructured messages through a secure Cloudflare tunnel and Slack trigger, normalizes conversational metadata, and uses an intent-classification router to deterministically delegate tasks to domain-isolated expert agents—such as dedicated Calendar and Gmail units equipped exclusively with their respective authenticated OAuth2 API tools. By replacing monolithic prompting with modular, domain-specific execution branches and persistent channel-based memory, the assistant achieves sub-two-second response latencies while eliminating tool hallucinations during schedule queries, event creations, and inbox triage, ultimately delivering a seamless, single-interface automation pipeline directly within the Slack thread.",
+        execSummaryHTML: `
+          <div class="cs-block">
+            <h4 class="cs-block-heading">Core Challenge</h4>
+            <p class="cs-block-p">Constant context-switching across communication, email, and calendar tools causes severe productivity loss and delayed response times.</p>
+          </div>
+          <div class="cs-block">
+            <h4 class="cs-block-heading">System Architecture</h4>
+            <p class="cs-block-p">An autonomous supervisor-router multi-agent framework built with self-hosted n8n and Google Gemini 1.5 Flash directly inside Slack.</p>
+          </div>
+          <div class="cs-block">
+            <h4 class="cs-block-heading">Workflow Breakdown</h4>
+            <ul class="cs-block-list">
+              <li><strong>Secure Ingestion:</strong> Captures incoming Slack interactions via an encrypted Cloudflare Tunnel and webhook trigger.</li>
+              <li><strong>Intent Classification:</strong> Normalizes conversational metadata and intelligently categorizes the user's intent.</li>
+              <li><strong>Domain-Isolated Agents:</strong> Deterministically delegates actions to dedicated Calendar and Gmail sub-agents equipped with authenticated OAuth2 tools.</li>
+              <li><strong>Zero-Hallucination Delivery:</strong> Executes queries, schedules events, and drafts emails with sub-2s latency directly in the Slack thread.</li>
+            </ul>
+          </div>
+          <div class="cs-block">
+            <h4 class="cs-block-heading">Key Outcomes</h4>
+            <ul class="cs-block-list">
+              <li>⚡ <strong>Sub-2s response latency</strong> across all multi-turn conversations.</li>
+              <li>🎯 <strong>99% task routing accuracy</strong> with zero tool hallucinations.</li>
+              <li>🔄 <strong>Zero context switches</strong> required for daily operations.</li>
+            </ul>
+          </div>
+        `,
         metricLabel: "Response Latency:",
         metricTag: "Sub-2 Seconds ⚡"
       }
@@ -515,7 +560,33 @@ function initApp() {
       caseStudy: {
         title: "Customer Support - Ingestion & Triage: Scaling High-Volume Ticket Resolution",
         subtitle: "Automated LLM ticket triage, Airtable context grounding, and reply drafting.",
-        execSummary: "To eliminate manual lookup overhead and reduce severe tier-1 ticket backlogs, a fast-growing Direct-to-Consumer retail brand deployed the Customer Support - Ingestion & Triage workflow in n8n, directly linking inbound customer messaging with Airtable and Google Gemini. When incoming queries trigger the Webhook, the pipeline validates customer identity via an initial record search and safely diverts unverified requests, while legitimate inquiries are routed through Google Gemini to classify customer intent and extract critical entities such as order IDs. The system immediately logs a new ticket in Airtable, queries the database to enrich the prompt with live order details and shipping policies, and feeds this verified context into a second Gemini model to generate an accurate, grounded reply draft that is written directly back to the database for human review. By automating context retrieval and message drafting, the company cut its First Response Time by 72%, prevented AI policy hallucinations through strict data grounding, and enabled support agents to absorb a 60% surge in order volume during peak retail seasons without expanding headcount.",
+        execSummaryHTML: `
+          <div class="cs-block">
+            <h4 class="cs-block-heading">Core Challenge</h4>
+            <p class="cs-block-p">High-volume Tier-1 customer tickets created severe backlogs, slow first responses, and manual lookup overhead across disparate databases.</p>
+          </div>
+          <div class="cs-block">
+            <h4 class="cs-block-heading">System Architecture</h4>
+            <p class="cs-block-p">An automated triaging and grounded drafting pipeline in n8n connecting customer webhooks with Airtable and Google Gemini models.</p>
+          </div>
+          <div class="cs-block">
+            <h4 class="cs-block-heading">Workflow Breakdown</h4>
+            <ul class="cs-block-list">
+              <li><strong>Webhook Ingestion & Verification:</strong> Receives customer requests, validates identity records, and routes securely.</li>
+              <li><strong>Entity & Intent Extraction:</strong> Uses Gemini to extract Order IDs, email addresses, issue category, and urgency level.</li>
+              <li><strong>Context Grounding:</strong> Queries Airtable in real-time for live tracking status, fulfillment records, and store policies.</li>
+              <li><strong>Grounded Draft Generation:</strong> Prompts a secondary Gemini model with retrieved facts to draft accurate, brand-aligned replies for agent review.</li>
+            </ul>
+          </div>
+          <div class="cs-block">
+            <h4 class="cs-block-heading">Key Outcomes</h4>
+            <ul class="cs-block-list">
+              <li>⚡ <strong>72% reduction</strong> in First Response Time (FRT).</li>
+              <li>📈 <strong>60% surge volume absorbed</strong> during peak seasons with zero extra headcount.</li>
+              <li>🛡️ <strong>Zero hallucinations</strong> through strict database-backed grounding.</li>
+            </ul>
+          </div>
+        `,
         metricLabel: "Response Time:",
         metricTag: "-72% Reduction ⚡"
       }
@@ -543,7 +614,34 @@ function initApp() {
       caseStudy: {
         title: "AI Speed-to-Lead Qualification Pipeline",
         subtitle: "Real-time Tally ingestion, Gemini AI scoring, Airtable logging & Gmail outreach.",
-        execSummary: "Manual lead qualification introduces delays that drastically reduce conversion rates. This project implements an autonomous 'Speed-to-Lead' pipeline built in Make.com that ingests inbound inquiries, scores and categorizes them via Google Gemini AI, and routes high-priority prospects to storage and notification systems within seconds.\n\nWorkflow Overview (5-Stage Breakdown):\n• Trigger — Form Ingestion (Tally): Watches for incoming submissions in real time.\n• Analysis — Intelligent Evaluation (Google Gemini AI): Receives raw form payload and formats output into structured JSON.\n• Transformation — Data Parsing (JSON Parser): Converts Gemini's raw string output into structured key-value pairs.\n• Logic — Conditional Routing (Router & Qualification Filter): Checks qualification status.\n• Action — Storage & Outreach (Airtable, HTTP, Gmail):\n  - Route 1: Automatically creates a structured record in Airtable & downstream tools.\n  - Route 2: Triggers an automated personalized email via Gmail.",
+        execSummaryHTML: `
+          <div class="cs-block">
+            <h4 class="cs-block-heading">Core Challenge</h4>
+            <p class="cs-block-p">Delayed lead qualification severely degrades conversion rates, while manual triage wastes hours of high-value sales time.</p>
+          </div>
+          <div class="cs-block">
+            <h4 class="cs-block-heading">System Architecture</h4>
+            <p class="cs-block-p">An autonomous Speed-to-Lead ingestion and scoring pipeline engineered in Make.com with Gemini AI structured output parsing.</p>
+          </div>
+          <div class="cs-block">
+            <h4 class="cs-block-heading">Workflow Breakdown (5 Stages)</h4>
+            <ul class="cs-block-list">
+              <li><strong>Trigger (Tally Forms):</strong> Ingests new inbound form submissions instantly via webhooks.</li>
+              <li><strong>Analysis (Google Gemini AI):</strong> Scores project budget, urgency, and requirements into validated JSON schemas.</li>
+              <li><strong>Transformation (JSON Parser):</strong> Converts AI outputs into normalized key-value data structures.</li>
+              <li><strong>Logic (Conditional Router):</strong> Automatically segments prospects based on qualification criteria and priority tiers.</li>
+              <li><strong>Action (Airtable & Gmail):</strong> Creates CRM records in Airtable and dispatches personalized outreach in under 30 seconds.</li>
+            </ul>
+          </div>
+          <div class="cs-block">
+            <h4 class="cs-block-heading">Key Outcomes</h4>
+            <ul class="cs-block-list">
+              <li>⚡ <strong>Sub-30-second response time</strong> from form submission to inbox outreach.</li>
+              <li>📊 <strong>100% data consistency</strong> and automated Airtable logging.</li>
+              <li>🙌 <strong>Zero manual triaging workload</strong> required from the sales team.</li>
+            </ul>
+          </div>
+        `,
         metricLabel: "Speed-to-Lead:",
         metricTag: "< 30 Seconds ⚡"
       }
@@ -607,8 +705,8 @@ function initApp() {
         // Strip screenshot, workflow overview, tools used, and right results panel for "About More Projects"
         mainPanel.innerHTML = `
           <div class="about-more-projects-panel" style="width: 100%; height: 100%; min-height: 420px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 48px 36px; background: var(--card-bg, rgba(255,255,255,0.02)); border-radius: 24px; border: 1px solid var(--icon-btn-border, rgba(255,255,255,0.08)); position: relative; overflow: hidden; box-shadow: var(--card-shadow, none);">
-            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: 20px; background: var(--btn-bg, rgba(255,255,255,0.08)); color: var(--text-main, #ffffff); font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 22px; border: 1px solid var(--icon-btn-border, rgba(255,255,255,0.15));">
-              <span>⚡ 40+ SUCCESSFUL BUILDS</span>
+            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: 20px; background: var(--btn-bg, rgba(255,255,255,0.08)); color: #000000 !important; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 22px; border: 1px solid var(--icon-btn-border, rgba(255,255,255,0.15));">
+              <span style="color: #000000 !important;">⚡ 40+ SUCCESSFUL BUILDS</span>
             </div>
             <h3 style="font-size: 28px; font-weight: 800; line-height: 1.35; margin-bottom: 18px; color: var(--text-main, #ffffff); max-width: 680px;">
               The three projects you have just seen are our best time-saving projects ever made.
@@ -721,7 +819,7 @@ function initApp() {
     if (subEl) subEl.textContent = cs.subtitle;
 
     const execEl = document.getElementById('case-study-exec-text');
-    if (execEl) execEl.textContent = cs.execSummary;
+    if (execEl) execEl.innerHTML = cs.execSummaryHTML || cs.execSummary;
 
     const metricLabelEl = document.getElementById('case-study-metric-label');
     if (metricLabelEl) metricLabelEl.textContent = cs.metricLabel || 'Response Latency:';
@@ -831,8 +929,10 @@ function initApp() {
     triggerHeroAnimation();
   }
 
-  // Auto-open Welcome Modal on page load
-  setTimeout(openWelcomeModal, 250);
+  // Auto-open Welcome Modal only on first session visit
+  if (!hasVisited) {
+    setTimeout(openWelcomeModal, 250);
+  }
 
   if (welcomeCloseBtn) {
     welcomeCloseBtn.addEventListener('click', closeWelcomeModal);

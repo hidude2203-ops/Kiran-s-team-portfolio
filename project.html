@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Start Your Automation Project</title>
+    <link rel="icon" type="image/png" href="cur.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script async src="https://tally.so/widgets/embed.js"></script>
+    <style type="text/css">
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        background: #09090b;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      }
+      iframe {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+      /* Top Left: Back to Home */
+      .top-nav-left {
+        position: fixed;
+        top: 18px;
+        left: 22px;
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+      }
+      .back-floating-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        border-radius: 999px;
+        background: rgba(17, 17, 24, 0.88);
+        border: 1px solid rgba(204, 255, 0, 0.35);
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(204, 255, 0, 0.15);
+        transition: all 0.25s ease;
+        cursor: pointer;
+      }
+      .back-floating-btn:hover {
+        background: #ccff00;
+        color: #000000;
+        border-color: #ccff00;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(204, 255, 0, 0.4);
+      }
+      /* Top Right: About + (i) Icon Button */
+      .top-nav-right {
+        position: fixed;
+        top: 18px;
+        right: 22px;
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+      }
+      .about-info-capsule-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px 7px 16px;
+        border-radius: 999px;
+        background: rgba(17, 17, 24, 0.88);
+        border: 1px solid rgba(204, 255, 0, 0.35);
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 700;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        letter-spacing: 0.3px;
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(204, 255, 0, 0.15);
+        transition: all 0.25s ease;
+        cursor: pointer;
+      }
+      .about-info-capsule-btn:hover,
+      .about-info-capsule-btn.active {
+        background: #ccff00;
+        color: #000000;
+        border-color: #ccff00;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(204, 255, 0, 0.4);
+      }
+      .info-icon-badge {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(204, 255, 0, 0.2);
+        border: 1px solid rgba(204, 255, 0, 0.5);
+        color: #ccff00;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 800;
+        font-family: Georgia, serif;
+        font-style: italic;
+        line-height: 1;
+        transition: all 0.25s ease;
+      }
+      .about-info-capsule-btn:hover .info-icon-badge,
+      .about-info-capsule-btn.active .info-icon-badge {
+        background: #000000;
+        color: #ccff00;
+        border-color: #000000;
+      }
+      /* Info Modal Popover Note (Anchored Top Right) */
+      .info-popover-modal {
+        position: fixed;
+        top: 68px;
+        right: 22px;
+        left: auto;
+        width: 480px;
+        max-width: calc(100vw - 44px);
+        max-height: calc(100vh - 90px);
+        background: rgba(12, 12, 18, 0.96);
+        border: 1px solid rgba(204, 255, 0, 0.4);
+        border-radius: 24px;
+        padding: 24px 26px;
+        color: #ffffff;
+        z-index: 999999;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 30px rgba(204, 255, 0, 0.18);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-12px) scale(0.96);
+        transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .info-popover-modal.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+      }
+      .info-popover-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        margin-bottom: 16px;
+        flex-shrink: 0;
+      }
+      .info-popover-title-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .info-sparkle-icon {
+        color: #ccff00;
+        font-size: 16px;
+      }
+      .info-popover-main-title {
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: -0.4px;
+        color: #ffffff;
+      }
+      .info-popover-close {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .info-popover-close:hover {
+        background: #ccff00;
+        color: #000000;
+        border-color: #ccff00;
+      }
+      .info-popover-body {
+        overflow-y: auto;
+        padding-right: 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .info-popover-body::-webkit-scrollbar {
+        width: 4px;
+      }
+      .info-popover-body::-webkit-scrollbar-thumb {
+        background: rgba(204, 255, 0, 0.3);
+        border-radius: 4px;
+      }
+      .info-intro-p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .info-section-heading {
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        color: #ccff00;
+        text-transform: uppercase;
+        margin-top: 6px;
+        padding-top: 10px;
+        border-top: 1px dashed rgba(255, 255, 255, 0.12);
+      }
+      .info-steps-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .info-step-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 14px;
+        padding: 14px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .info-step-title {
+        font-size: 13px;
+        font-weight: 800;
+        color: #ffffff;
+      }
+      .info-step-desc {
+        font-size: 12px;
+        line-height: 1.55;
+        color: rgba(255, 255, 255, 0.78);
+      }
+      .info-callout-quote {
+        background: rgba(204, 255, 0, 0.08);
+        border-left: 3px solid #ccff00;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 11.5px;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.9);
+        margin-top: 4px;
+      }
+      .info-callout-quote strong {
+        color: #ccff00;
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Top Left Floating Navigation: Back to Home -->
+    <div class="top-nav-left">
+      <a href="index.html" class="back-floating-btn" title="Back to Portfolio">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Home
+      </a>
+    </div>
+
+    <!-- Top Right Floating Navigation: About + i Icon -->
+    <div class="top-nav-right">
+      <button class="about-info-capsule-btn" id="info-btn" aria-label="About this Project Intake Form" title="About">
+        <span>About</span>
+        <span class="info-icon-badge">i</span>
+      </button>
+    </div>
+
+    <!-- Info Popover Modal Note (Opens Instantly on Hover & Click) -->
+    <div class="info-popover-modal" id="info-modal">
+      <div class="info-popover-header">
+        <div class="info-popover-title-row">
+          <span class="info-sparkle-icon">&#10022;</span>
+          <h2 class="info-popover-main-title">Tell Us About Your Project</h2>
+        </div>
+        <button class="info-popover-close" id="info-close" aria-label="Close Info">&times;</button>
+      </div>
+
+      <div class="info-popover-body">
+        <p class="info-intro-p">
+          This form helps us understand your business, your current process, the problem you want to solve, and what you expect from the automation. The more details you provide, the better we can understand your requirements and determine the right approach for your project.
+        </p>
+
+        <h3 class="info-section-heading">What Happens After You Submit?</h3>
+
+        <div class="info-steps-list">
+
+          <!-- Step 01 -->
+          <div class="info-step-card">
+            <div class="info-step-title">01 &mdash; Confirmation Email</div>
+            <p class="info-step-desc">
+              Immediately after submitting the form, you’ll receive a confirmation email letting you know that we’ve received your inquiry.
+            </p>
+            <div class="info-callout-quote">
+              <strong>Note:</strong> Sometimes the confirmation email may be filtered into your <strong>Spam, Junk, or Promotions</strong> folder. If you don’t see it in your inbox, please check those folders.
+            </div>
+          </div>
+
+          <!-- Step 02 -->
+          <div class="info-step-card">
+            <div class="info-step-title">02 &mdash; We Review Your Requirements</div>
+            <p class="info-step-desc">
+              We’ll carefully review the information you submitted, understand your current workflow and requirements, and identify the most suitable automation approach for your project.
+            </p>
+          </div>
+
+          <!-- Step 03 -->
+          <div class="info-step-card">
+            <div class="info-step-title">03 &mdash; Project Assessment</div>
+            <p class="info-step-desc">
+              Based on your requirements, we’ll determine the workflow, integrations, tools, complexity, and other technical details needed to complete the project.
+            </p>
+          </div>
+
+          <!-- Step 04 -->
+          <div class="info-step-card">
+            <div class="info-step-title">04 &mdash; Proposal, Pricing &amp; Agreement</div>
+            <p class="info-step-desc">
+              Within <strong>24 hours</strong>, we’ll get back to you with the relevant project details, including the proposed solution, pricing, payment information, agreement, and any other important documents or information required before starting.
+            </p>
+          </div>
+
+          <!-- Step 05 -->
+          <div class="info-step-card">
+            <div class="info-step-title">05 &mdash; Project Confirmation</div>
+            <p class="info-step-desc">
+              Your project is considered <strong>confirmed only after the proposal and agreement are accepted and the required initial payment is completed</strong>. We’ll then proceed with the agreed automation work.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Full-Page Embedded Tally Form -->
+    <iframe data-tally-src="https://tally.so/r/0QNpeZ" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="Start Your Automation Project"></iframe>
+
+    <script>
+      const infoBtn = document.getElementById('info-btn');
+      const infoModal = document.getElementById('info-modal');
+      const infoClose = document.getElementById('info-close');
+
+      if (infoBtn && infoModal) {
+        // Instant open on hover
+        infoBtn.addEventListener('mouseenter', () => {
+          infoModal.classList.add('is-open');
+          infoBtn.classList.add('active');
+        });
+
+        // Toggle on click
+        infoBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          infoModal.classList.toggle('is-open');
+          infoBtn.classList.toggle('active', infoModal.classList.contains('is-open'));
+        });
+
+        if (infoClose) {
+          infoClose.addEventListener('click', (e) => {
+            e.stopPropagation();
+            infoModal.classList.remove('is-open');
+            infoBtn.classList.remove('active');
+          });
+        }
+
+        document.addEventListener('click', (e) => {
+          if (!infoModal.contains(e.target) && !infoBtn.contains(e.target)) {
+            infoModal.classList.remove('is-open');
+            infoBtn.classList.remove('active');
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
